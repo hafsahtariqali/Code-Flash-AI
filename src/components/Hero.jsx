@@ -18,7 +18,7 @@ const Hero = () => {
   };
 
   return (
-    <div id='hero' className="bg-black text-white bg-hero-gradient py-[72px] sm:py-24 relative overflow-clip">
+    <div id='hero' className="bg-black text-white bg-hero-gradient py-[72px] sm:py-15 relative overflow-clip">
       <div className="absolute h-[375px] w-[750px] sm:w-[1536px] sm:h-[768px] lg:w-[2400px] lg:h-[1200px] rounded-[100%] bg-black left-1/2 -translate-x-1/2 border border-[#B48CDE] bg-radial-gradient top-[calc(100%-96px)] sm:top-[calc(100%-120px)]"></div>
       <div className="container relative">
         <div className="flex justify-center mt-8">
