@@ -41,7 +41,7 @@ const NavBar = () => {
               Pricing
             </Link>
             <Link href='#cta' className='bg-white py-2 px-4 text-black'>
-              Get for Free
+              Get Started
             </Link>
           </nav>
         </div>
@@ -70,7 +70,7 @@ const NavBar = () => {
         </Link>
         <Link href='#cta'>
           <button className='bg-white py-2 px-4 text-black' onClick={toggleMenu}>
-            Get for Free
+            Get Started
           </button>
         </Link>
       </div>
