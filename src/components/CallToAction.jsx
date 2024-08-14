@@ -29,12 +29,9 @@ export const CallToAction = () => {
             className="bg-white text-black py-3 px-5 rounded-lg font-medium"
             onClick={handleOpenModal}
           >
-            Join waitlist now!
+            Get Started
           </button>
         </div>
-        <p className="mt-8 text-white/60 text-sm">
-          Join waitlist and get access to premium features for a month.
-        </p>
       </div>
 
       <Waitlist isOpen={isModalOpen} onClose={handleCloseModal} />
