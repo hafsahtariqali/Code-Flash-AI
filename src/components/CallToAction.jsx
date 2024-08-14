@@ -1,19 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import Waitlist from './Waitlist'; // Adjust the import path as needed
 
 export const CallToAction = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <div id='cta' className="bg-gradient-to-b from-[#5D2CA8] to-black text-white py-20">
       <div className="container mx-auto text-center px-4 relative">
@@ -27,14 +16,11 @@ export const CallToAction = () => {
         <div className="flex justify-center mt-2">
           <button
             className="bg-white text-black py-3 px-5 rounded-lg font-medium hover:bg-gray-100 hover:scale-105 transition duration-300 ease-in-out"
-            onClick={handleOpenModal}
           >
             Get Started
           </button>
         </div>
       </div>
-
-      <Waitlist isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };
