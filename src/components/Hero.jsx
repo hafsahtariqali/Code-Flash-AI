@@ -49,7 +49,7 @@ const Hero = () => {
         </div>
         <div className="flex justify-center mt-8">
           <button
-            className="bg-white text-black py-3 px-5 rounded-lg font-medium"
+            className="bg-white text-black py-3 px-5 rounded-lg font-medium hover:bg-gray-100 hover:scale-105 transition duration-300 ease-in-out"
             onClick={handleOpenModal}
           >
             Get Started
