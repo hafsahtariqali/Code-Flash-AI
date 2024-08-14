@@ -52,7 +52,7 @@ const Hero = () => {
             className="bg-white text-black py-3 px-5 rounded-lg font-medium"
             onClick={handleOpenModal}
           >
-            Join Waitlist Now
+            Get Started
           </button>
         </div>
       </div>
