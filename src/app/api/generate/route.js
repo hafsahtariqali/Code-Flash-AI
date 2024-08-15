@@ -33,20 +33,19 @@ export async function POST(req) {
   try {
     const groq = new Groq({ apiKey: process.env.OPEN_AI_KEY });
 
-    // Parse the incoming request as JSON
+   
     const { data, difficulty } = await req.json();
 
-    // Create the completion request
+ 
     const completion = await groq.chat.completions.create({
         messages: [
             { role: 'system', content: systemPrompt(difficulty) },
-            { role: 'user', content: data },  // Ensure 'content' is correctly populated
+            { role: 'user', content: data },  
         ],
         model: 'llama3-8b-8192',
         response_format: { type: 'json_object' },
     });
 
-    // Parse the response and extract flashcards
     const flashcards = JSON.parse(completion.choices[0].message.content);
 
     return NextResponse.json(flashcards.flashcards);
