@@ -4,22 +4,23 @@ import React from 'react';
 import { FaLightbulb, FaChartBar, FaClock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
+
 const features = [
   {
     icon: <FaLightbulb size={18} color="#000" />,
-    title: "Active Recall:",
+    title: "Active Recall",
     description:
-      "Challenge your understanding with engaging questions and editable code snippets.",
+      "Challenge your understanding with engaging questions",
   },
   {
     icon: <FaChartBar size={18} color="#000" />,
-    title: "Customized Learning:",
+    title: "Customized Learning",
     description:
       "Tailor your learning based on goals and skill level and get custom study plans",
   },
   {
     icon: <FaClock size={18} color="#000" />,
-    title: "Spaced Repetition:",
+    title: "Spaced Repetition",
     description:
       "Revisit concepts at optimal intervals for more effective retention.",
   },

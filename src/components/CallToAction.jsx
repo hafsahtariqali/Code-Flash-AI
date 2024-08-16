@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from 'next/link'; 
+
 
 export const CallToAction = () => {
   return (
@@ -14,11 +16,9 @@ export const CallToAction = () => {
           Unlock your full potential with personalized study plans and advanced learning techniques.
         </p>
         <div className="flex justify-center mt-2">
-          <button
-            className="bg-white text-black py-3 px-5 rounded-lg font-medium hover:bg-gray-100 hover:scale-105 transition duration-300 ease-in-out"
-          >
-            Get Started
-          </button>
+        <Link href="/sign-in" className='bg-white text-black py-3 px-5 rounded-lg font-medium hover:bg-gray-100 hover:scale-105 transition duration-300 ease-in-out'> {/* Use Link component for navigation */}
+              Get Started
+          </Link>
         </div>
       </div>
     </div>

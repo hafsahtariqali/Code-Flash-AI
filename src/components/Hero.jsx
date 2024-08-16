@@ -4,6 +4,8 @@ import Image from 'next/image';
 import bulbImage from '../assets/images/lightbulb.png';
 import checkImage from '../assets/images/checkmark.png';
 import { motion } from 'framer-motion';
+import Link from 'next/link'; 
+
 
 const Hero = () => {
   return (
@@ -37,11 +39,9 @@ const Hero = () => {
           </p>
         </div>
         <div className="flex justify-center mt-8">
-          <button
-            className="bg-white text-black py-3 px-5 rounded-lg font-medium hover:bg-gray-100 hover:scale-105 transition duration-300 ease-in-out"
-          >
-            Get Started
-          </button>
+        <Link href="/sign-in" className='bg-white text-black py-3 px-5 rounded-lg font-medium hover:bg-gray-100 hover:scale-105 transition duration-300 ease-in-out'> {/* Use Link component for navigation */}
+              Get Started
+          </Link>
         </div>
       </div>
     </div>

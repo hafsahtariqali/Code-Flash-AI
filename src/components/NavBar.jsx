@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link'; // Import Link from next/link
 import MenuIcon from '../assets/icons/menu.svg';
 import CloseIcon from '../assets/icons/x.svg';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +17,7 @@ const NavBar = () => {
       <div className='px-4'>
         <div className='py-4 flex items-center justify-between'>
           <div className='flex items-center'>
-            <Link href='#hero' className='text-white font-bold text-lg'>
+            <Link href='/' className='text-white font-bold text-lg'>
               CodeFlash
             </Link>
           </div>
@@ -30,7 +31,9 @@ const NavBar = () => {
           </div>
 
           {/* Desktop menu */}
+          
           <nav className='text-white flex gap-6 items-center hidden sm:flex'>
+            <SignedOut>
             <Link href='#hero' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
               Home
             </Link>
@@ -43,6 +46,21 @@ const NavBar = () => {
             <Link href='#cta' className='bg-white py-2 px-4 text-black'>
               Get Started
             </Link>
+            </SignedOut>
+
+            <SignedIn>
+            <Link href='/dashboard' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Dashboard
+            </Link>
+            <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Saved
+            </Link>
+            {/* <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Plan
+            </Link> */}
+            <UserButton/>
+            </SignedIn>
+            
           </nav>
         </div>
       </div>
