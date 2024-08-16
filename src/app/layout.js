@@ -15,8 +15,9 @@ const metadata = {
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
+  const publishableKey = NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={publishableKey}>
     <html lang="en">
       <body className={clsx(dmSans.className, "antialiased")}>
         <NavBar/>
