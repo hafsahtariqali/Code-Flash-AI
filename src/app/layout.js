@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 
+
 // Define metadata directly as a JavaScript object
 const metadata = {
   title: "CodeFlash",
@@ -13,11 +14,11 @@ const metadata = {
 
 // Apply DM Sans font
 const dmSans = DM_Sans({ subsets: ["latin"] });
+//const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 export default function RootLayout({ children }) {
-  const publishableKey = NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
   return (
-    <ClerkProvider publishableKey={publishableKey}>
+    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
     <html lang="en">
       <body className={clsx(dmSans.className, "antialiased")}>
         <NavBar/>
