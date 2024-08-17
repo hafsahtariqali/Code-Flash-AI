@@ -15,10 +15,11 @@ const plans = [
     buttonText: "Get started for Free",
     buttonVariant: "border border-white/30 text-white",
     textColor: "text-white",
+    isPro: false,
   },
   {
     name: "Pro",
-    price: "$5",
+    price: "$10",
     features: [
       "For single person + guest",
       "Unlimited flashcards",
@@ -28,6 +29,7 @@ const plans = [
     buttonText: "Go Pro",
     buttonVariant: "bg-black text-white",
     textColor: "text-black",
+    isPro: true,
   },
   {
     name: "Enterprise",
@@ -41,6 +43,7 @@ const plans = [
     buttonText: "Get started with Enterprise",
     buttonVariant: "bg-white text-black",
     textColor: "text-white",
+    isPro: false,
   },
 ];
 
@@ -76,8 +79,8 @@ const Pricings = () => {
     } catch (error) {
       console.error('Error creating checkout session:', error);
     }
-
   };
+
   return (
     <div id='pricings' className="bg-gradient-to-b from-black to-[#5D2CA8] text-white py-[20px] pb-20">
       <div className="container">
@@ -98,7 +101,7 @@ const Pricings = () => {
               <h3 className={`font-bold text-2xl mb-4 ${plan.textColor}`}>{plan.name}</h3>
               <p className={`text-3xl font-bold mb-6 ${plan.textColor}`}>{plan.price}</p>
               <ul className={`space-y-2 mb-6 ${plan.textColor}`}>
-                                {plan.features.map((feature, index) => (
+                {plan.features.map((feature, index) => (
                   <li key={index} className={`${plan.name === "Pro" ? "text-gray-700" : "text-white/70"}`}>
                     {feature}
                   </li>
@@ -116,7 +119,7 @@ const Pricings = () => {
                   {plan.buttonText}
                 </button>
               )}
-        </motion.div>
+            </motion.div>
           ))}
         </motion.div>
       </div>
