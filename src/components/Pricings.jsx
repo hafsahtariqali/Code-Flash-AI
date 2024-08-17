@@ -20,7 +20,7 @@ const plans = [
   },
   {
     name: "Pro",
-    price: "$10",
+    price: "$3",
     features: [
       "For single person + guest",
       "Unlimited flashcards",
@@ -35,7 +35,7 @@ const plans = [
   },
   {
     name: "Enterprise",
-    price: "Custom",
+    price: "$5",
     features: [
       "For multiple teams",
       "Unlimited flashcards",
@@ -65,7 +65,7 @@ const Pricings = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          plan: plan,  // Pass the selected plan name
+          plan: plan,
           amount: amount,
           currency: currency,
           interval: interval,
