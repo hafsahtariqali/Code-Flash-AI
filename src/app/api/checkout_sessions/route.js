@@ -8,7 +8,7 @@ const formatAmountForStripe = (amount, currency) => {
 };
 
 export async function POST(req) {
-  const { plan, amount, currency, interval } = await req.json(); 
+  const { plan, amount, currency, interval } = await req.json();
 
   const params = {
     mode: 'subscription',
@@ -16,11 +16,11 @@ export async function POST(req) {
     line_items: [
       {
         price_data: {
-          currency: 'usd',
+          currency: currency,
           product_data: {
-            name: `${plan} subscription`,  
+            name: `${plan} subscription`,
           },
-          unit_amount: formatAmountForStripe(amount, currency),
+          unit_amount: formatAmountForStripe(amount, currency), // e.g., 10.00 EUR
           recurring: {
             interval: interval,
             interval_count: 1,
@@ -29,8 +29,7 @@ export async function POST(req) {
         quantity: 1,
       },
     ],
-    success_url: `${req.headers.get('Referer')}result?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${req.headers.get('Referer')}`, 
+    success_url: `${req.headers.get('Referer')}success`, // Redirect to success page
   };
 
   try {
