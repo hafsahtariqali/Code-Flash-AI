@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -16,11 +16,11 @@ const plans = [
     buttonVariant: "border border-white/30 text-white",
     textColor: "text-white",
     isPro: false,
-    isExpertise: false,
+    isEnterprise: false,
   },
   {
     name: "Pro",
-    price: "€3",
+    price: "$10",
     features: [
       "For single person + guest",
       "Unlimited flashcards",
@@ -31,11 +31,11 @@ const plans = [
     buttonVariant: "bg-black text-white",
     textColor: "text-black",
     isPro: true,
-    isExpertise: false,
+    isEnterprise: false,
   },
   {
     name: "Enterprise",
-    price: "€5",
+    price: "Custom",
     features: [
       "For multiple teams",
       "Unlimited flashcards",
@@ -46,7 +46,7 @@ const plans = [
     buttonVariant: "bg-white text-black",
     textColor: "text-white",
     isPro: false,
-    isExpertise: true,
+    isEnterprise: true,
   },
 ];
 
@@ -57,7 +57,7 @@ const cardVariants = {
 };
 
 const Pricings = () => {
-  const handleCheckout = async (amount, currency, interval) => {
+  const handleCheckout = async (plan, amount, currency, interval) => {
     try {
       const response = await fetch('/api/checkout_sessions', {
         method: 'POST',
@@ -65,6 +65,7 @@ const Pricings = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          plan: plan,  // Pass the selected plan name
           amount: amount,
           currency: currency,
           interval: interval,
@@ -110,14 +111,23 @@ const Pricings = () => {
                   </li>
                 ))}
               </ul>
-              {(plan.isPro || plan.isExpertise) ? (
+              {plan.isPro && (
                 <button
                   className={`mt-6 py-2 px-4 rounded-lg font-bold ${plan.buttonVariant}`}
-                  onClick={() => handleCheckout(plan.isPro ? 3 : 5, 'eur', 'month')}
+                  onClick={() => handleCheckout("Pro", 3, 'eur', 'month')}
                 >
                   {plan.buttonText}
                 </button>
-              ) : (
+              )}
+              {plan.isEnterprise && (
+                <button
+                  className={`mt-6 py-2 px-4 rounded-lg font-bold ${plan.buttonVariant}`}
+                  onClick={() => handleCheckout("Enterprise", 5, 'eur', 'month')}
+                >
+                  {plan.buttonText}
+                </button>
+              )}
+              {!plan.isPro && !plan.isEnterprise && (
                 <button className={`mt-6 py-2 px-4 rounded-lg font-bold ${plan.buttonVariant}`}>
                   {plan.buttonText}
                 </button>
