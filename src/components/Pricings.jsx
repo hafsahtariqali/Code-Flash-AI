@@ -16,10 +16,11 @@ const plans = [
     buttonVariant: "border border-white/30 text-white",
     textColor: "text-white",
     isPro: false,
+    isExpertise: false,
   },
   {
     name: "Pro",
-    price: "$10",
+    price: "€3",
     features: [
       "For single person + guest",
       "Unlimited flashcards",
@@ -30,10 +31,11 @@ const plans = [
     buttonVariant: "bg-black text-white",
     textColor: "text-black",
     isPro: true,
+    isExpertise: false,
   },
   {
     name: "Enterprise",
-    price: "Custom",
+    price: "€5",
     features: [
       "For multiple teams",
       "Unlimited flashcards",
@@ -44,6 +46,7 @@ const plans = [
     buttonVariant: "bg-white text-black",
     textColor: "text-white",
     isPro: false,
+    isExpertise: true,
   },
 ];
 
@@ -107,10 +110,10 @@ const Pricings = () => {
                   </li>
                 ))}
               </ul>
-              {plan.isPro ? (
+              {(plan.isPro || plan.isExpertise) ? (
                 <button
                   className={`mt-6 py-2 px-4 rounded-lg font-bold ${plan.buttonVariant}`}
-                  onClick={() => handleCheckout(10, 'eur', 'month')}
+                  onClick={() => handleCheckout(plan.isPro ? 3 : 5, 'eur', 'month')}
                 >
                   {plan.buttonText}
                 </button>
