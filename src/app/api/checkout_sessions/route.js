@@ -16,7 +16,7 @@ export async function POST(req) {
     line_items: [
       {
         price_data: {
-          currency: currency,
+          currency: 'usd',
           product_data: {
             name: `${plan} subscription`,  
           },

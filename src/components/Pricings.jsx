@@ -114,7 +114,7 @@ const Pricings = () => {
               {plan.isPro && (
                 <button
                   className={`mt-6 py-2 px-4 rounded-lg font-bold ${plan.buttonVariant}`}
-                  onClick={() => handleCheckout("Pro", 3, 'eur', 'month')}
+                  onClick={() => handleCheckout("Pro", 3, 'usd', 'month')}
                 >
                   {plan.buttonText}
                 </button>
@@ -122,7 +122,7 @@ const Pricings = () => {
               {plan.isEnterprise && (
                 <button
                   className={`mt-6 py-2 px-4 rounded-lg font-bold ${plan.buttonVariant}`}
-                  onClick={() => handleCheckout("Enterprise", 5, 'eur', 'month')}
+                  onClick={() => handleCheckout("Enterprise", 5, 'usd', 'month')}
                 >
                   {plan.buttonText}
                 </button>
