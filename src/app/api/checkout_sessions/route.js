@@ -11,28 +11,28 @@ export async function POST(req) {
   const { plan, amount, currency, interval } = await req.json(); 
 
   const params = {
-    mode: 'subscription',
-    payment_method_types: ['card'],
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: `${plan} subscription`,
-          },
-          unit_amount: formatAmountForStripe(amount, currency),
-          recurring: {
-            interval: interval,
-            interval_count: 1,
-          },
+  mode: 'subscription',
+  payment_method_types: ['card'],
+  line_items: [
+    {
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: `${plan} subscription`,
         },
-        quantity: 1,
+        unit_amount: formatAmountForStripe(amount, currency),
+        recurring: {
+          interval: interval,
+          interval_count: 1,
+        },
       },
-    ],
-    success_url: `${req.headers.get('Origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${req.headers.get('Origin')}/cancel`,
-  };
-  
+      quantity: 1,
+    },
+  ],
+  success_url: `${req.headers.get('Origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
+  cancel_url: `${req.headers.get('Origin')}/cancel`,
+};
+
 
   try {
     const checkoutSession = await stripe.checkout.sessions.create(params);

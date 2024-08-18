@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect } from 'react';
@@ -57,6 +58,7 @@ const Success = () => {
         </button>
     </div>
 </div>
+
   );
 };
 
