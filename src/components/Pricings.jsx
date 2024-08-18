@@ -1,9 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
-import { db } from "../../firebase";
-import { doc, updateDoc } from 'firebase/firestore';
-import {  useUser } from "@clerk/nextjs";
+
 
 
 
@@ -93,15 +91,7 @@ const handleCheckout = async (plan, amount, currency, interval) => {
     window.location.href = session.url;
 
     
-    const { user } = useUser();
- 
-      
-      const userDocRef = doc(db, 'Users', user.primaryEmailAddress.emailAddress);
-
-      await updateDoc(userDocRef, {
-       subscription: plan 
-           
-      });
+    
     
   
 
