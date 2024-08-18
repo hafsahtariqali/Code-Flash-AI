@@ -1,30 +1,38 @@
 'use client';
 import Flashcard from "@/components/flashcard";
-import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import CollectionModal from "@/components/CollectionModal";
+import { SignedIn, useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import { db } from "../../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 const SavedCards = () => {
     const [flashcards, setFlashcards] = useState([]);
+    const [plan, setPlan] = useState();
     const [message, setMessage] = useState('No saved items yet');
-    const { user, isLoaded } = useUser(); // Clerk user hook
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { user, isLoaded } = useUser();
+    const [collectionNames, setCollectionNames] = useState([]);
+    const [selectedFilter, setSelectedFilter] = useState('savedCards');
+    
     const fetchSavedCards = async () => {
+        const userEmail = user.primaryEmailAddress?.emailAddress || user.primaryEmailAddress; 
         try {
-            const userEmail = user.primaryEmailAddress?.emailAddress || user.primaryEmailAddress; 
             console.log("User Email: " + userEmail);
             
             // Reference to the user's document
             const userDocRef = doc(db, 'Users', userEmail);
 
-            // Fetch the document once
             const userDocSnapshot = await getDoc(userDocRef);
 
             if (userDocSnapshot.exists()) {
                 const userData = userDocSnapshot.data();
-                const savedCards = userData.savedCards || []; // Default to an empty array if `savedCards` doesn't exist
-                setFlashcards(savedCards); // Update state with data
+                const savedCards = userData.savedCards || [];
+                const collections = userData.collections || {};
+                
+                setPlan(userData.subscription);
+                setFlashcards(savedCards); // Initially show saved cards
+                setCollectionNames(Object.keys(collections));
                 console.log('Saved cards retrieved and stored:', savedCards);
             } else {
                 console.log('No user data found');
@@ -49,12 +57,67 @@ const SavedCards = () => {
         }
     }, [flashcards]);
 
+    const handleFilterChange = async (event) => {
+        const userEmail = user.primaryEmailAddress?.emailAddress || user.primaryEmailAddress; 
+        const selectedValue = event.target.value;
+        setSelectedFilter(selectedValue);
+    
+        try {
+            const userDocRef = doc(db, 'Users', userEmail);
+            const userDocSnapshot = await getDoc(userDocRef);
+    
+            if (userDocSnapshot.exists()) {
+                const userData = userDocSnapshot.data();
+                if (selectedValue === 'savedCards') {
+                    setFlashcards(userData.savedCards || []);
+                } else {
+                    const collectionCards = userData.collections?.[selectedValue] || [];
+                    setFlashcards(collectionCards);
+                }
+            }
+        } catch (error) {
+            console.error('Error retrieving user data: ', error);
+        }
+    };
+    
+
+
+
+
+
     return (
-        <div className="relative min-h-screen bg-black">
+        <div className="bg-hero-gradient relative min-h-screen bg-black p-4">
             <SignedIn>
-                <div className="flex flex-row items-center m-2 p-4 flex-wrap transition-">
+                {user && plan === 'Pro' && (
+                    <div className="top-4 right-4 flex flex-row">
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className='bg-white py-2 px-4 text-black rounded-lg shadow-lg'
+                        >
+                            Create a collection
+                        </button>
+                    <select 
+                        value={selectedFilter} 
+                        onChange={handleFilterChange} 
+                        className="bg-white text-black p-2 rounded-lg ml-4"
+                    >
+                        <option value="savedCards">Saved Cards</option>
+                        {collectionNames.map((name) => (
+                            <option key={name} value={name}>
+                                {name}
+                            </option>
+                        ))}
+                    </select>
+
+
+                    </div>
+                )}
+
+               
+
+                <div className="flex flex-row items-center m-2 p-4 flex-wrap">
                     {flashcards.length === 0 ? (
-                        <h1 className="flex items-center justify-center text-center h-screen text-4xl font-bold">{message}</h1>
+                        <h1 className="flex items-center justify-center text-center h-screen text-4xl font-bold text-white">{message}</h1>
                     ) : (
                         flashcards.map((flashcard) => (
                             <Flashcard
@@ -62,11 +125,17 @@ const SavedCards = () => {
                                 isOpened={false}
                                 question={flashcard.front}
                                 answer={flashcard.back}
+                                saved={true}
                             />
                         ))
                     )}
                 </div>
-            </SignedIn>
+            <CollectionModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                flashcards={flashcards}
+                />
+                </SignedIn>
         </div>
     );
 };

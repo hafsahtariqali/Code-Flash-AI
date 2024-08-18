@@ -3,22 +3,23 @@ import React, { useState } from 'react';
 import Link from 'next/link'; // Import Link from next/link
 import MenuIcon from '../assets/icons/menu.svg';
 import CloseIcon from '../assets/icons/x.svg';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = useUser();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <div className='bg-black'>
+    <div className='bg-transparent'>
       <div className='px-4'>
         <div className='py-4 flex items-center justify-between'>
           <div className='flex items-center'>
             <Link href='/' className='text-white font-bold text-lg'>
-              CodeFlash
+            {user ?   "Welcome," + user.username : "CodeFlash"}
             </Link>
           </div>
 
@@ -31,36 +32,40 @@ const NavBar = () => {
           </div>
 
           {/* Desktop menu */}
-          
           <nav className='text-white flex gap-6 items-center hidden sm:flex'>
             <SignedOut>
-            <Link href='#hero' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Home
-            </Link>
-            <Link href='#features' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Features
-            </Link>
-            <Link href='#pricings' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Pricing
-            </Link>
-            <Link href='#cta' className='bg-white py-2 px-4 text-black'>
-              Get Started
-            </Link>
+              <Link href='/#hero' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+                Home
+              </Link>
+              <Link href='/#features' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+                Features
+              </Link>
+              <Link href='/#pricings' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+                Pricing
+              </Link>
+              <Link href='/#contact' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+                Contact
+              </Link>
+              <Link href='/sign-in' className='bg-white py-2 px-4 text-black rounded-lg'>
+                Get Started
+              </Link>
             </SignedOut>
 
             <SignedIn>
-            <Link href='/dashboard' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Dashboard
-            </Link>
-            <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Saved
-            </Link>
-            {/* <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Plan
-            </Link> */}
-            <UserButton/>
+              <Link href='/' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+                Home
+              </Link>
+              <Link href='/dashboard' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+                Dashboard
+              </Link>
+              <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+                Saved
+              </Link>
+              <Link href='/plan' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+                Plan
+              </Link>
+              <UserButton />
             </SignedIn>
-            
           </nav>
         </div>
       </div>
@@ -78,33 +83,38 @@ const NavBar = () => {
         </div>
 
         <SignedOut>
-            <Link href='#hero' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Home
-            </Link>
-            <Link href='#features' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Features
-            </Link>
-            <Link href='#pricings' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Pricing
-            </Link>
-            <Link href='#cta' className='bg-white py-2 px-4 text-black'>
-              Get Started
-            </Link>
-            </SignedOut>
+          <Link href='/#hero' className='text-opacity-60 text-white hover:text-opacity-100 transition' onClick={toggleMenu}>
+            Home
+          </Link>
+          <Link href='/#features' className='text-opacity-60 text-white hover:text-opacity-100 transition' onClick={toggleMenu}>
+            Features
+          </Link>
+          <Link href='/#pricings' className='text-opacity-60 text-white hover:text-opacity-100 transition' onClick={toggleMenu}>
+            Pricing
+          </Link>
+          <Link href='/#contact' className='text-opacity-60 text-white hover:text-opacity-100 transition' onClick={toggleMenu}>
+                Contact
+              </Link>
+          <Link href='/sign-in' className='bg-white py-2 px-4 text-black rounded-lg' onClick={toggleMenu}>
+            Get Started
+          </Link>
+        </SignedOut>
 
-            <SignedIn>
-            <Link href='/dashboard' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Dashboard
-            </Link>
-            <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Saved
-            </Link>
-            {/* <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
-              Plan
-            </Link> */}
-            <UserButton/>
-            </SignedIn>
-            
+        <SignedIn>
+          <Link href='/' className='text-opacity-60 text-white hover:text-opacity-100 transition' onClick={toggleMenu}>
+            Home
+          </Link>
+          <Link href='/dashboard' className='text-opacity-60 text-white hover:text-opacity-100 transition' onClick={toggleMenu}>
+            Dashboard
+          </Link>
+          <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition' onClick={toggleMenu}>
+            Saved
+          </Link>
+          <Link href='/plan' className='text-opacity-60 text-white hover:text-opacity-100 transition' onClick={toggleMenu}>
+            Plan
+          </Link>
+          <UserButton />
+        </SignedIn>
       </div>
     </div>
   );

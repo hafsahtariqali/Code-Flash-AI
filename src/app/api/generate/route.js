@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
-import Groq from "groq-sdk";
+import Groq from 'groq-sdk';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../../../firebase';
+
 
 const systemPromptFree = `You are a flashcard creator. Your task is to generate a small set of flashcards based on the given information:
 1. Create clear and concise questions and answers for the flashcards.
-2. Ensure that each flashcard focuses on a single concept or piece of information.
-3. Use simple and straightforward language to make the flashcards accessible to a wide range of learners.
-4. Include a variety of question types, such as definitions, examples, comparisons, and applications.
-5. Avoid overly complex or ambiguous phrasing in both questions and answers.
-6. Format the output strictly as valid JSON.
+2. Ensure that each flashcard focuses on a single basic concept or key information.
+3. Use simple and straightforward language, accessible to all learners.
+4. Provide essential information without going into advanced details.
+5. Avoid complex examples, but make sure the flashcards are still useful.
+6. Tailor the difficulty level of the flashcards to a mid-level, around 5 out of 10.
+7. Format the output strictly as valid JSON.
 
 Return the flashcards in the following JSON format:
 {
@@ -21,16 +25,15 @@ Return the flashcards in the following JSON format:
 }
 Strictly ensure that there is no other text than the flashcards array in JSON format.`;
 
+
 const systemPromptPro = `You are a flashcard creator. Your task is to generate a set of flashcards based on the given information:
 1. Create clear, concise, and engaging questions and answers for the flashcards.
-2. Ensure that each flashcard covers a key concept or piece of information, with a focus on enhancing understanding.
-3. Use a mix of straightforward and moderately challenging language to cater to learners who want a bit more depth.
-4. Include a variety of question types, such as definitions, examples, comparisons, applications, and problem-solving scenarios.
-5. Use some mnemonics or memory aids to help reinforce key information.
-6. Tailor the difficulty level of the flashcards to the user's specified preferences, which is {difficulty} out of 10.
-7. Extract the most important and relevant information from the provided text for the flashcards.
-8. Ensure the set is interesting and comprehensive, giving learners a solid grasp of the topic.
-9. Format the output strictly as valid JSON.
+2. Ensure that each flashcard covers a key concept or detailed information with examples where relevant.
+3. Use language that is both straightforward and moderately challenging to encourage deeper understanding.
+4. Include mnemonics or tips to help reinforce key information where appropriate.
+5. Tailor the difficulty level of the flashcards to the user's preference, around 7 out of 10.
+6. Extract and focus on the most important and relevant information from the provided text.
+7. Format the output strictly as valid JSON.
 
 Return the flashcards in the following JSON format:
 {
@@ -46,14 +49,13 @@ Strictly ensure that there is no other text than the flashcards array in JSON fo
 
 const systemPromptEnterprise = `You are a flashcard creator. Your task is to generate an extensive and in-depth set of flashcards based on the given information:
 1. Create clear, concise, and engaging questions and answers for the flashcards.
-2. Ensure that each flashcard delves into important concepts, with a focus on thorough understanding.
-3. Use a range of language, including advanced terminology, to cater to learners looking for a deep dive into the topic.
-4. Include a wide variety of question types, such as definitions, examples, comparisons, applications, problem-solving scenarios, and analytical questions.
-5. Use effective mnemonics or memory aids where appropriate to reinforce the information.
-6. Tailor the difficulty level of the flashcards to the user's specified preferences, which is {difficulty} out of 10.
-7. Extract the most important and relevant information from the provided text for the flashcards, ensuring comprehensive coverage.
-8. Aim to create an engaging and thorough set of flashcards that covers the topic extensively.
-9. Format the output strictly as valid JSON.
+2. Ensure that each flashcard covers in-depth concepts with advanced terminology where appropriate.
+3. Use a variety of question types including problem-solving scenarios and analytical questions.
+4. Provide detailed examples and comparisons to enhance understanding.
+5. Use effective mnemonics or memory aids where appropriate.
+6. Tailor the difficulty level to 9 or 10 out of 10 for an advanced learner.
+7. Ensure comprehensive coverage of the topic, touching on advanced and niche concepts.
+8. Format the output strictly as valid JSON.
 
 Return the flashcards in the following JSON format:
 {
@@ -70,10 +72,11 @@ Strictly ensure that there is no other text than the flashcards array in JSON fo
 export async function POST(req) {
   try {
     const groq = new Groq({ apiKey: process.env.OPEN_AI_KEY });
-    const { data, difficulty, plan } = await req.json();
+    const { data, difficulty, plan } = await req.json(); // Plan comes from the client-side
+    console.log('Received plan:', plan);
 
     let adjustedDifficulty = difficulty;
-    let totalFlashcards = 5;
+    let totalFlashcards = 8;
     let prompt = systemPromptFree;
 
     if (plan === 'Pro') {
@@ -115,3 +118,4 @@ export async function POST(req) {
     return NextResponse.json({ error: "Failed to generate flashcards" }, { status: 500 });
   }
 }
+
