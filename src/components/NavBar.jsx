@@ -77,20 +77,34 @@ const NavBar = () => {
           <CloseIcon className='text-white h-8 w-8' />
         </div>
 
-        <Link href='#hero' className='text-opacity-60 text-white hover:text-opacity-100 transition mb-4' onClick={toggleMenu}>
-          Home
-        </Link>
-        <Link href='#features' className='text-opacity-60 text-white hover:text-opacity-100 transition mb-4' onClick={toggleMenu}>
-          Features
-        </Link>
-        <Link href='#pricings' className='text-opacity-60 text-white hover:text-opacity-100 transition mb-4' onClick={toggleMenu}>
-          Pricing
-        </Link>
-        <Link href='#cta'>
-          <button className='bg-white py-2 px-4 text-black' onClick={toggleMenu}>
-            Get Started
-          </button>
-        </Link>
+        <SignedOut>
+            <Link href='#hero' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Home
+            </Link>
+            <Link href='#features' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Features
+            </Link>
+            <Link href='#pricings' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Pricing
+            </Link>
+            <Link href='#cta' className='bg-white py-2 px-4 text-black'>
+              Get Started
+            </Link>
+            </SignedOut>
+
+            <SignedIn>
+            <Link href='/dashboard' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Dashboard
+            </Link>
+            <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Saved
+            </Link>
+            {/* <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+              Plan
+            </Link> */}
+            <UserButton/>
+            </SignedIn>
+            
       </div>
     </div>
   );
