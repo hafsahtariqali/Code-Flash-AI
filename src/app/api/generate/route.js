@@ -1,5 +1,7 @@
-import { NextResponse } from 'next/server'
-import Groq from "groq-sdk";
+import { NextResponse } from 'next/server';
+import Groq from 'groq-sdk';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../../../firebase';
 
 const systemPrompt = (difficulty) => `You are a flashcard creator. Your task is to generate a set of flashcards based on the given information:
 1. Create clear and concise questions and answers for the flashcards.
@@ -14,7 +16,6 @@ const systemPrompt = (difficulty) => `You are a flashcard creator. Your task is 
 10. Format the output strictly as valid JSON.
 11. If asked about code or snippets, divide it into the number of flashcards instead of making a mess in response
 
-
 Return the flashcards in the following JSON format:
 {
   "flashcards": [
@@ -27,16 +28,16 @@ Return the flashcards in the following JSON format:
 }
 Strictly ensure that there is no other text than the flashcards array in JSON format`;
 
-
 export async function POST(req) {
   try {
     const groq = new Groq({ apiKey: process.env.OPEN_AI_KEY });
-    const { data, difficulty, plan } = await req.json();
+    const { data, difficulty, plan } = await req.json(); // Plan comes from the client-side
+    console.log('Received plan:', plan);
 
     let adjustedDifficulty = difficulty;
     let totalFlashcards = 10;
 
-    if (plan === 'Premium') {
+    if (plan === 'Pro') {
       adjustedDifficulty = Math.min(difficulty + 1, 10);
       totalFlashcards = 20;
     } else if (plan === 'Enterprise') {

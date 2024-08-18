@@ -19,13 +19,13 @@ const Dashboard = () => {
         try {
             const userEmail = user.primaryEmailAddress?.emailAddress || user.primaryEmailAddress;
             console.log("User Email: " + userEmail);
-
+    
             // Reference to the user's document
             const userDocRef = doc(db, 'Users', userEmail);
-
+    
             // Check if the document exists
             const userDocSnapshot = await getDoc(userDocRef);
-
+    
             if (!userDocSnapshot.exists()) {
                 // If the document does not exist, create it
                 await setDoc(userDocRef, {
@@ -33,19 +33,22 @@ const Dashboard = () => {
                     savedCards: [],
                     subscription: 'Free'
                 });
-
+    
                 console.log('User data stored successfully');
+                setPlan('Free'); // Set the default plan
             } else {
-                // If it exists, retrieve saved cards (if needed)
+                // If it exists, retrieve saved cards and subscription
                 const userData = userDocSnapshot.data();
                 const savedCards = userData.savedCards || []; // Default to an empty array if `savedCards` doesn't exist
                 setFlashcards(savedCards);
+                setPlan(userData.subscription || 'Free'); // Set the plan from Firestore
                 console.log('User data retrieved:', userData);
             }
         } catch (error) {
             console.error('Error handling user data: ', error);
         }
     };
+    
 
     useEffect(() => {
         if (isLoaded && user) {
@@ -66,16 +69,16 @@ const Dashboard = () => {
         setFlashcards([]);
         setMessage('');
         setLoading(true); // Set loading to true
-
+    
         if (data.trim() === '') {
             alert("Please enter some data to generate flashcards.");
             setLoading(false); // Set loading to false
             return;
         }
-
+    
         const formData = { data, difficulty, plan };
-        console.log(formData);
-
+        console.log('Generating flashcards with formData:', formData); // Log formData to check plan value
+    
         try {
             const response = await fetch("/api/generate", {
                 method: "POST",
@@ -84,13 +87,13 @@ const Dashboard = () => {
                 },
                 body: JSON.stringify(formData)
             });
-
+    
             if (!response.ok) {
                 throw new Error("Error generating flashcards, check your plan or try contacting the admin");
             }
-
+    
             const result = await response.json();
-            console.log(result);
+            console.log('Flashcards received:', result); // Log the result to check number of flashcards
             setFlashcards(result);
             setQuestion(data);
             setData('');
@@ -101,6 +104,7 @@ const Dashboard = () => {
             setLoading(false); // Set loading to false after request completes
         }
     };
+    
 
     const handleTextareaChange = (e) => {
         const textarea = e.target;

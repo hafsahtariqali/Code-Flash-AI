@@ -1,6 +1,11 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { db } from "../../firebase";
+import { doc, updateDoc } from 'firebase/firestore';
+import {  useUser } from "@clerk/nextjs";
+
+
 
 const plans = [
   {
@@ -57,33 +62,57 @@ const cardVariants = {
 };
 
 const Pricings = () => {
-  const handleCheckout = async (plan, amount, currency, interval) => {
-    try {
-      const response = await fetch('/api/checkout_sessions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          plan: plan,
-          amount: amount,
-          currency: currency,
-          interval: interval,
-        }),
-      });
+  
 
-      const session = await response.json();
 
-      if (session.error) {
-        console.error(session.error.message);
-        return;
-      }
 
-      window.location.href = session.url;
-    } catch (error) {
-      console.error('Error creating checkout session:', error);
+
+const handleCheckout = async (plan, amount, currency, interval) => {
+  try {
+    const response = await fetch('/api/checkout_sessions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        plan: plan,
+        amount: amount,
+        currency: currency,
+        interval: interval,
+      }),
+    });
+
+    const session = await response.json();
+
+    if (session.error) {
+      console.error(session.error.message);
+      return;
     }
-  };
+
+    // Redirect to the payment URL
+    window.location.href = session.url;
+
+    
+    const { user } = useUser();
+ 
+      
+      const userDocRef = doc(db, 'Users', user.primaryEmailAddress.emailAddress);
+
+      await updateDoc(userDocRef, {
+       subscription: plan 
+           
+      });
+    
+  
+
+
+    
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+  }
+};
+
+
 
   return (
     <div id='pricings' className="bg-gradient-to-b from-black to-[#5D2CA8] text-white py-[20px] pb-20">

@@ -55,9 +55,9 @@ const NavBar = () => {
             <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
               Saved
             </Link>
-            {/* <Link href='/savedCards' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
+            <Link href='/plan' className='text-opacity-60 text-white hover:text-opacity-100 transition'>
               Plan
-            </Link> */}
+            </Link>
             <UserButton/>
             </SignedIn>
             
