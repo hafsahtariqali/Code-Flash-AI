@@ -43,10 +43,18 @@ const Flashcard = ({ isOpened, question, answer, saved }) => {
 
       if (userDocSnapshot.exists()) {
         const data = userDocSnapshot.data();
+        if(data.subscription == 'Pro'){
         if (data.savedCards && data.savedCards.length >= 20) {
           setSnackbarVisible(true);
           setTimeout(() => setSnackbarVisible(false), 3000); // Hide after 3 seconds
           return; // Prevent further execution if limit is reached
+        }}
+        else{
+          if (data.savedCards && data.savedCards.length >= 10) {
+            setSnackbarVisible(true);
+            setTimeout(() => setSnackbarVisible(false), 3000); // Hide after 3 seconds
+            return; // Prevent further execution if limit is reached
+          }
         }
       }
 
