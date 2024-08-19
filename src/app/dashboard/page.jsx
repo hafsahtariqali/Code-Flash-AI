@@ -163,7 +163,7 @@ const Dashboard = () => {
             });
     
             if (!response.ok) {
-                throw new Error("Error generating flashcards, check your plan or try contacting the admin");
+                throw new Error("Error generating flashcards, check your plan or try rewriting prompt. If issue persists, contact admin");
             }
     
             const result = await response.json();
