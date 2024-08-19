@@ -10,7 +10,7 @@ import Head from 'next/head';
 
 // Define metadata directly as a JavaScript object
 const metadata = {
-  title: "CodeFlash",
+  title: "Code Flash",
   description: "Enhance your coding skills using our active recall flashcards!",
 };
 
