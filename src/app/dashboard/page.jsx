@@ -139,7 +139,9 @@ const Dashboard = () => {
                         </div>
                         <div className="flex flex-row items-center m-2 p-4 flex-wrap transition-">
                             {flashcards.length === 0 ? (
-                                <h1 className="flex items-center justify-center text-center h-screen text-4xl font-bold">{message}</h1>
+                                 <div className="flex items-center justify-center h-screen">
+                                    <h1 className="text-center text-4xl font-bold">{message}</h1>
+                                </div>
                             ) : (
                                 flashcards.map((flashcard) => (
                                     <Flashcard
