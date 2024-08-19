@@ -14,7 +14,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className='bg-transparent'>
+    <div className='bg-black'>
       <div className='px-4'>
         <div className='py-4 flex items-center justify-between'>
           <div className='flex items-center'>
