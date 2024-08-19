@@ -52,12 +52,12 @@ const ContactForm = () => {
   };
 
   return (
-    <div id='contact' className="bg-hero-gradient min-h-screen flex items-center justify-center py-10">
+    <div id='contact' className="bg-gradient-to-b from-black to-[#5D2CA8] text-white min-h-screen flex items-center justify-center py-10">
       <div className="bg-black p-8 rounded-lg shadow-lg max-w-lg w-full">
-        <h2 className="text-2xl font-bold mb-6 text-center">Contact Us</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-white">Contact Us</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="form-group">
-            <label htmlFor="name" className="block text-lg font-medium mb-2">Name</label>
+            <label htmlFor="name" className="block text-lg font-medium mb-2 text-white">Name</label>
             <input
               type="text"
               id="name"
@@ -69,7 +69,7 @@ const ContactForm = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="email" className="block text-lg font-medium mb-2">Email</label>
+            <label htmlFor="email" className="block text-lg font-medium mb-2 text-white">Email</label>
             <input
               type="email"
               id="email"
@@ -81,7 +81,7 @@ const ContactForm = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="message" className="block text-lg font-medium mb-2">Message</label>
+            <label htmlFor="message" className="block text-lg font-medium mb-2 text-white">Message</label>
             <textarea
               id="message"
               name="message"
