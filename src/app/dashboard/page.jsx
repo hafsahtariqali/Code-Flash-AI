@@ -3,54 +3,125 @@ import Flashcard from "@/components/flashcard";
 import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import { db } from "../../../firebase";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import Snackbar from "@/components/Snackbar"; // Make sure the path is correct
+
+const PRO_EMAILS = new Set([
+    'hassansiddiqui740@gmail.com',
+    'jenongrab@gmail.com',
+    'isdm908@gmail.com',
+    'ahmadbu648@gmail.com',
+    'samarthx04@gmail.com',
+    'rasheedabdullah317@gmail.com',
+    'dcvivian36@gmail.com',
+    'sajjadabdullah147@gmail.com',
+    'manalz1619@gmail.com',
+    'pianostars04@gmail.com',
+    'shahrozjkl@gmail.com',
+    'brisprats@gmail.com',
+    'chaudharyshabbir246@gmail.com',
+    'rahatshahid750@gmail.com',
+    'ridaabid767@gmail.com',
+    'logicalbakwas@gmail.com',
+    'wordsofahmad@gmail.com',
+    'muazaziz23@gmail.com',
+    'kaneezayesha808@gmail.com',
+    'maheenasad19@gmail.com',
+    'Luciann.misc@gmail.com',
+    'yasmineh2006@gmail.com',
+    'aliroohan321@gmail.com',
+    'oneplayer605@gmail.com',
+    'maxyclassic197@mailfast.pro',
+    'workemail.microsoft@gmail.com',
+    'ehsanellahi1075@gmail.com',
+    'hirraict369@gmail.com',
+    'zainabtariqali77@gmail.com',
+    'narmin4@yahoo.com',
+    'abdullahkoraal@gmail.com',
+    'sbahatshahid07@gmail.com',
+    'salmanahmadyt@gmail.com',
+    'marhabaemaan@gmail.com',
+    'umerabbasi2003@gmail.com',
+    'umerabbasi3002@gmail.com',
+    'duaaaabrar@gmail.com',
+    'hamzaafzal.official@gmail.com',
+    'syetaha@gmail.com',
+    'ayeshamunawar1000@gmail.com',
+    'm.abubakrshahid787@gmail.com',
+    'ayemish123@gmail.com',
+    'samriddhimatharu1@gmail.com',
+    'k213929@nu.edu.pk',
+    'abbasiumer979@gmail.com'
+]);
 
 const Dashboard = () => {
     const [flashcards, setFlashcards] = useState([]);
-    const [message, setMessage] = useState('Generate Flashcards with your custom prompt and difficulty');
+    const [message, setMessage] = useState('Generate Flashcards with CodeFlash');
     const [data, setData] = useState('');
     const [difficulty, setDifficulty] = useState(5);
     const [plan, setPlan] = useState("Free");
     const [question, setQuestion] = useState('');
-    const [loading, setLoading] = useState(false); // Loading state
-    const { user, isLoaded } = useUser(); // Clerk user hook
-    const [saved,setisSaved] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [saved, setIsSaved] = useState(false);
+    const [snackbarVisible, setSnackbarVisible] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const { user, isLoaded } = useUser();
+
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${day}-${month}-${year}`;
 
     const handleUserData = async (user) => {
         try {
             const userEmail = user.primaryEmailAddress?.emailAddress || user.primaryEmailAddress;
             console.log("User Email: " + userEmail);
-    
-            
+
             const userDocRef = doc(db, 'Users', userEmail);
             const userDocSnapshot = await getDoc(userDocRef);
-    
+
+            const oneMonthInMillis = 30 * 24 * 60 * 60 * 1000;
+
             if (!userDocSnapshot.exists()) {
-                // If the document does not exist, create it
                 await setDoc(userDocRef, {
                     email: userEmail,
                     savedCards: [],
-                    subscription: 'Free'
+                    subscription: PRO_EMAILS.has(userEmail) ? 'Pro' : 'Free',
+                    subscriptionDate: formattedDate
                 });
-    
+
                 console.log('User data stored successfully');
-                setPlan('Free'); 
+                setPlan(PRO_EMAILS.has(userEmail) ? 'Pro' : 'Free');
             
             } else {
                 const userData = userDocSnapshot.data();
-                setPlan(userData.subscription)
+                const subscriptionDate = new Date(userData.subscriptionDate);
+                const timeDifference = currentDate - subscriptionDate;
+
+                if (timeDifference > oneMonthInMillis && userData.subscription === 'Pro') {
+                    await updateDoc(userDocRef, {
+                        subscription: 'Free',
+                        subscriptionDate: formattedDate
+                    });
+
+                    setSnackbarMessage('Your Pro subscription has expired. You have been downgraded to Free.');
+                    setSnackbarVisible(true);
+                    setPlan('Free');
+                } else {
+                    setPlan(userData.subscription || 'Free');
+                }
+
                 const savedCards = userData.savedCards || [];
                 setFlashcards(savedCards);
-                setisSaved(true)
-                setPlan(userData.subscription || 'Free'); 
-                userData.subscription=='Pro' ? setDifficulty(10): setDifficulty(5)
-                console.log('User data retrieved:',     userData);
+                setIsSaved(true);
+                setDifficulty(userData.subscription === 'Pro' ? 10 : 5);
+                console.log('User data retrieved:', userData);
             }
         } catch (error) {
             console.error('Error handling user data: ', error);
         }
     };
-    
 
     useEffect(() => {
         if (isLoaded && user) {
@@ -60,7 +131,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (flashcards.length === 0) {
-            setMessage('Generate Flashcards with your custom prompt and difficulty');
+            setMessage('Generate Flashcards with CodeFlash');
         } else {
             setMessage('');
         }
@@ -69,7 +140,7 @@ const Dashboard = () => {
     const generate = async (e) => {
         e.preventDefault();
         setFlashcards([]);
-        setisSaved(false)
+        setIsSaved(false);
         setMessage('');
         setLoading(true); 
     
@@ -96,7 +167,7 @@ const Dashboard = () => {
             }
     
             const result = await response.json();
-            console.log('Flashcards received:', result); // Log the result to check number of flashcards
+            console.log('Flashcards received:', result);
             setFlashcards(result);
             setQuestion(data);
             setData('');
@@ -104,10 +175,9 @@ const Dashboard = () => {
             console.error(error);
             alert(error.message);
         } finally {
-            setLoading(false); // Set loading to false after request completes
+            setLoading(false);
         }
     };
-    
 
     const handleTextareaChange = (e) => {
         const textarea = e.target;
@@ -119,14 +189,13 @@ const Dashboard = () => {
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-          e.preventDefault(); // Prevent default Enter key action
-          document.getElementById('submit-btn').click(); // Trigger button click
+            e.preventDefault();
+            document.getElementById('submit-btn').click();
         }
-      };
+    };
 
     return (
-        <div className={`relative min-h-screen 
-        ${plan=='Pro' ? 'bg-custom-gradient'  :'bg-hero-gradient'}`}>
+        <div className={`relative min-h-screen transition-background ${plan === 'Pro' ? 'bg-custom-gradient' : 'bg-hero-gradient'}`}>
             <SignedIn>
                 {loading ? (
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -139,7 +208,9 @@ const Dashboard = () => {
                         </div>
                         <div className="flex flex-row items-center m-2 p-4 flex-wrap transition-">
                             {flashcards.length === 0 ? (
-                                <h1 className="flex items-center justify-center text-center h-screen text-4xl font-bold">{message}</h1>
+                                <div className="flex items-center justify-center h-screen">
+                                    <h1 className="text-center text-4xl font-bold">{message}</h1>
+                                </div>
                             ) : (
                                 flashcards.map((flashcard) => (
                                     <Flashcard
@@ -154,8 +225,7 @@ const Dashboard = () => {
                         </div>
                         <div className="fixed bottom-0 left-0 w-full p-4 flex items-center justify-center">
                             <div className="w-full flex max-w-4xl items-center gap-2">
-                                <form onSubmit={generate} 
-                                className="w-full flex max-w-4xl items-center gap-2">
+                                <form onSubmit={generate} className="w-full flex max-w-4xl items-center gap-2">
                                     <textarea
                                         rows={1}
                                         value={data}
@@ -170,7 +240,7 @@ const Dashboard = () => {
                                     <button
                                         id="submit-btn"
                                         type="submit"
-                                        className="bg-white text-black p-2 rounded-md"
+                                        className="flex-none rounded-md bg-purple-500 px-4 py-2 text-black hover:bg-purple-600"
                                     >
                                         Generate
                                     </button>
@@ -180,10 +250,12 @@ const Dashboard = () => {
                     </>
                 )}
             </SignedIn>
-
             <SignedOut>
-                <h1 className="text-white text-center mt-4">Please Sign In to access the dashboard</h1>
+                <p className="text-white">Please sign in to access this feature.</p>
             </SignedOut>
+            {snackbarVisible && (
+                <Snackbar message={snackbarMessage} onClose={() => setSnackbarVisible(false)} />
+            )}
         </div>
     );
 };

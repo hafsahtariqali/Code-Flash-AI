@@ -4,7 +4,6 @@ export async function POST(request) {
   try {
     const { name, email, message } = await request.json();
 
-    // Do something with form data, if needed
 
     return new Response(JSON.stringify({ message: 'Message received.' }), {
       status: 200,

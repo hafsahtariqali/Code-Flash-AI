@@ -12,6 +12,7 @@ const systemPromptFree = `You are a flashcard creator. Your task is to generate 
 5. Avoid complex examples, but make sure the flashcards are still useful.
 6. Tailor the difficulty level of the flashcards to a mid-level, around 5 out of 10.
 7. Format the output strictly as valid JSON.
+8. Make sure to not generate any duplicate questions
 
 Return the flashcards in the following JSON format:
 {
@@ -31,9 +32,11 @@ const systemPromptPro = `You are a flashcard creator. Your task is to generate a
 2. Ensure that each flashcard covers a key concept or detailed information with examples where relevant.
 3. Use language that is both straightforward and moderately challenging to encourage deeper understanding.
 4. Include mnemonics or tips to help reinforce key information where appropriate.
-5. Tailor the difficulty level of the flashcards to the user's preference, around 7 out of 10.
+5. Tailor the difficulty level of the flashcards to the user's preference, around 9 out of 10.
 6. Extract and focus on the most important and relevant information from the provided text.
 7. Format the output strictly as valid JSON.
+8. Make sure to not generate any duplicate questions
+
 
 Return the flashcards in the following JSON format:
 {
@@ -118,4 +121,3 @@ export async function POST(req) {
     return NextResponse.json({ error: "Failed to generate flashcards" }, { status: 500 });
   }
 }
-

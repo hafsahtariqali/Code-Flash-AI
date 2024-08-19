@@ -10,6 +10,12 @@ import { useUser } from "@clerk/nextjs";
 const Success = () => {
   const router = useRouter();
   const { user } = useUser();
+  //fetching currentdate here
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; 
+  const day = currentDate.getDate();
+  const currentDay = `${day}-${month}-${year}`
 
 
     const handleRedirect = () => {
@@ -32,7 +38,8 @@ const Success = () => {
         const userDocRef = doc(db, 'Users', userEmail);
 
         await updateDoc(userDocRef, {
-          subscription: "Pro"
+          subscription: "Pro",
+          subscriptionDate:currentDay
         });
 
         console.log('Subscription updated successfully');

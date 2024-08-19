@@ -5,11 +5,12 @@ import { getDoc, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firest
 import { db } from '../../firebase';
 import { useUser } from '@clerk/nextjs';
 
-const Snackbar = ({ message, visible }) => (
+export const Snackbar = ({ message, visible }) => (
   <div className={`fixed bottom-20 right-4 bg-black text-white text-sm py-3 px-5 rounded shadow-lg transition-opacity duration-300 ${visible ? 'opacity-100' : 'opacity-0'}`}>
     {message}
   </div>
 );
+
 
 const Flashcard = ({ isOpened, question, answer, saved }) => {
   const [isFlipped, setIsFlipped] = useState(isOpened);
