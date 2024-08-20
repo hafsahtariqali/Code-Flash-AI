@@ -83,42 +83,49 @@ const Flashcard = ({ isOpened, question, answer, saved }) => {
         message="Your SavedCards storage is reached, try removing cards or upgrade your plan"
         visible={snackbarVisible}
       />
-      <div className="relative m-2 w-80 h-80 perspective-1000">
-        <div
-          className={`relative w-full h-full cursor-pointer transition-transform duration-500 transform-style-preserve ${isFlipped ? 'rotate-y-180' : ''}`}
-          onClick={handleCardClick}
-        >
-          <div className="absolute w-full h-full bg-white text-black border border-white flex items-center justify-center rounded-lg shadow-lg backface-hidden">
-            <p className="text-center text-lg p-4">{question}</p>
+     <div className="relative m-2 w-80 h-80 perspective-1000">
+  <div
+    className={`relative w-full h-full cursor-pointer transition-transform duration-500 transform-style-preserve ${isFlipped ? 'rotate-y-180' : ''}`}
+    onClick={handleCardClick}
+  >
+    {/* Front Side */}
+    <div className="absolute w-full h-full bg-white text-black border border-white flex items-center justify-center rounded-lg shadow-lg backface-hidden z-10"
+      style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+    >
+      <p className="text-center text-lg p-4">{question}</p>
 
-            <button
-              onClick={handleSaveButtonClick}
-              className={`absolute bottom-4 right-4 p-2 rounded-full transition-colors duration-300 
-                ${isSaved ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-600'}
-                hover:bg-gray-300`}
-              aria-label={isSaved ? 'Unsave' : 'Save'}
-              disabled={snackbarVisible} // Disable button if snackbar is visible
-            >
-              <HeartIcon className="w-6 h-6" />
-            </button>
-          </div>
+      <button
+        onClick={handleSaveButtonClick}
+        className={`absolute bottom-4 right-4 p-2 rounded-full transition-colors duration-300 
+          ${isSaved ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-600'}
+          hover:bg-gray-300`}
+        aria-label={isSaved ? 'Unsave' : 'Save'}
+        disabled={snackbarVisible} // Disable button if snackbar is visible
+      >
+        <HeartIcon className="w-6 h-6" />
+      </button>
+    </div>
 
-          <div className="absolute w-full h-full bg-hero-gradient border border-gray-700 text-white flex items-center justify-center rounded-lg shadow-lg rotate-y-180 backface-hidden">
-            <p className="text-center text-lg p-4">{answer}</p>
+    {/* Back Side */}
+    <div className="absolute w-full h-full bg-hero-gradient border border-gray-700 text-white flex items-center justify-center rounded-lg shadow-lg rotate-y-180 backface-hidden z-10"
+      style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+    >
+      <p className="text-center text-lg p-4">{answer}</p>
 
-            <button
-              onClick={handleSaveButtonClick}
-              className={`absolute bottom-4 right-4 p-2 rounded-full transition-colors duration-300 
-                ${isSaved ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-600'}
-                hover:bg-gray-300`}
-              aria-label={isSaved ? 'Unsave' : 'Save'}
-              disabled={snackbarVisible} // Disable button if snackbar is visible
-            >
-              <HeartIcon className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </div>
+      <button
+        onClick={handleSaveButtonClick}
+        className={`absolute bottom-4 right-4 p-2 rounded-full transition-colors duration-300 
+          ${isSaved ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-600'}
+          hover:bg-gray-300`}
+        aria-label={isSaved ? 'Unsave' : 'Save'}
+        disabled={snackbarVisible} // Disable button if snackbar is visible
+      >
+        <HeartIcon className="w-6 h-6" />
+      </button>
+    </div>
+  </div>
+</div>
+
     </>
   );
 };
