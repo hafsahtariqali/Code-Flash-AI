@@ -71,7 +71,7 @@ const Pricings = () => {
     },
     ...(!user ? [{
       name: "Enterprise",
-      price: "$-",
+      price: "$5",
       features: [
         "Difficulty adjustment",
         "Custom limit flashcards",
